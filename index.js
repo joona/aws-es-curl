@@ -46,7 +46,6 @@ var execute = function(endpoint, region, path, method, body) {
     var signer = new AWS.Signers.V4(req, 'es'); 
     signer.addAuthorization(creds, new Date()); 
     
-    // Post document to ES 
     var send = new AWS.NodeHttpClient(); 
     send.handleRequest(req, null, (httpResp) => { 
       var body = ''; 
@@ -64,32 +63,32 @@ var execute = function(endpoint, region, path, method, body) {
 };
 
 co(function*(){
-  var maybeUrl = options._[0];
-  var method = options.X || options.method || 'GET';
-  var region = options.region || 'eu-west-1';
+    var maybeUrl = options._[0];
+    var method = options.X || options.method || 'GET';
+    var region = options.region || 'eu-west-1';
 
-  var input;
-  if(!process.stdin.isTTY) {
-    input = yield readStdin();
-  }
+    var input;
+    if(!process.stdin.isTTY) {
+      input = yield readStdin();
+    }
 
-  if(!maybeUrl || (maybeUrl && maybeUrl == 'help') || options.help || options.h) {
-    console.log('Usage: aws-es-cli [options] <url>');
-    console.log();
-    console.log('Options:');
-    console.log("\t-X, --method \tHTTP method \t(Default: GET)");
-    console.log("\t--profile \tAWS profile \t(Default: default)");
-    console.log("\t--region \tAWS region \t(Default: eu-west-1)");
-    process.exit(1);
-  }
+    if(!maybeUrl || (maybeUrl && maybeUrl == 'help') || options.help || options.h) {
+      console.log('Usage: aws-es-curl [options] <url>');
+      console.log();
+      console.log('Options:');
+      console.log("\t-X, --method \tHTTP method \t(Default: GET)");
+      console.log("\t--profile \tAWS profile \t(Default: default)");
+      console.log("\t--region \tAWS region \t(Default: eu-west-1)");
+      process.exit(1);
+    }
 
-  if(maybeUrl && maybeUrl.indexOf('http') === 0) {
-    var uri = url.parse(maybeUrl);
-    var endpoint = new AWS.Endpoint(uri.host);
-    var response = yield execute(endpoint, region, uri.path, method, input);
-    process.stdout.write(response + "\n");
-  }
-})
+    if(maybeUrl && maybeUrl.indexOf('http') === 0) {
+      var uri = url.parse(maybeUrl);
+      var endpoint = new AWS.Endpoint(uri.host);
+      var response = yield execute(endpoint, region, uri.path, method, input);
+      process.stdout.write(response + "\n");
+    }
+  })
   .then(res => {
     process.exit(0);
   })
