@@ -1,0 +1,15 @@
+{
+  "name": "aws-elasticsearch-cli",
+  "version": "1.0.0",
+  "description": "Sign HTTP requests to AWS Elasticsearch",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Joona Kulmala <jmkulmala@gmail.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "aws-sdk": "^2.4.7",
+    "co": "^4.6.0"
+  }
+}
