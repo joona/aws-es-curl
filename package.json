@@ -1,11 +1,14 @@
 {
   "name": "aws-es-curl",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Simple curl-like utility with request signing support for AWS Elasticsearch",
   "main": "index.js",
   "repository": { 
     "type" : "git" , 
     "url" : "https://github.com/joona/aws-es-curl.git" 
+  },
+  "bin": {
+    "aws-es-curl": "bin/aws-es-curl"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
