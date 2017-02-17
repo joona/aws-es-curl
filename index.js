@@ -4,8 +4,30 @@ var url = require('url');
 var options = require('optimist')
   .argv;
 
-var profile = process.env.AWS_PROFILE || options.profile || 'default';
-var creds = new AWS.SharedIniFileCredentials({ profile });
+var credentials;
+
+var getMetadataCredentials = function() {
+  credentials = new AWS.EC2MetadataCredentials();
+  return credentials.getPromise()
+};
+
+var getCredentials = function*() {
+  var profile = process.env.AWS_PROFILE || options.profile;
+  if(process.env.AWS_ACCESS_KEY_ID && process.env.AWS_SECRET_ACCESS_KEY && !profile) {
+    credentials = new AWS.EnvironmentCredentials('AWS');
+    return;
+  }
+
+  if(!profile) {
+    try {
+      yield getMetadataCredentials();
+    } catch(err) {
+      console.error('failed to get metadata credentials');
+    }
+  }
+  
+  credentials = new AWS.SharedIniFileCredentials({ profile: profile || 'default' });
+}
 
 var readStdin = function() {
   return new Promise((resolve, reject) => {
@@ -44,7 +66,7 @@ var execute = function(endpoint, region, path, method, body) {
     req.headers.Host = endpoint.host;
 
     var signer = new AWS.Signers.V4(req, 'es'); 
-    signer.addAuthorization(creds, new Date()); 
+    signer.addAuthorization(credentials, new Date()); 
     
     var send = new AWS.NodeHttpClient(); 
     send.handleRequest(req, null, (httpResp) => { 
@@ -67,6 +89,8 @@ var main = function() {
       var maybeUrl = options._[0];
       var method = options.X || options.method || 'GET';
       var region = options.region || process.env.AWS_REGION || 'eu-west-1';
+
+      yield getCredentials();
 
       var input;
       if(!process.stdin.isTTY) {
