@@ -21,8 +21,9 @@ var getCredentials = function*() {
   if(!profile) {
     try {
       yield getMetadataCredentials();
+      return;
     } catch(err) {
-      console.error('failed to get metadata credentials');
+      console.error('Unable to access metadata service.', err.message);
     }
   }
   
