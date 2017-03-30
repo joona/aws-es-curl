@@ -27,7 +27,13 @@ var getCredentials = function*() {
     }
   }
   
-  credentials = new AWS.SharedIniFileCredentials({ profile: profile || 'default' });
+  credentials = new AWS.SharedIniFileCredentials({ 
+      profile: profile || 'default',
+      // the filename to use when loading credentials
+      // use of AWS_SHARED_CREDENTIALS_FILE environment variable
+      // see also 'The Shared Credentials File' http://docs.aws.amazon.com/cli/latest/topic/config-vars.html
+      filename: process.env.AWS_SHARED_CREDENTIALS_FILE
+   });
 }
 
 var readStdin = function() {
