@@ -95,7 +95,7 @@ var main = function() {
   co(function*(){
       var maybeUrl = options._[0];
       var method = options.X || options.method || 'GET';
-      var region = options.region || process.env.AWS_REGION || 'eu-west-1';
+      var region = options.region || process.env.AWS_DEFAULT_REGION || process.env.AWS_REGION || 'eu-west-1';
 
       yield getCredentials();
 
