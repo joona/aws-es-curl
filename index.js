@@ -26,8 +26,8 @@ var getCredentials = function*() {
       console.error('Unable to access metadata service.', err.message);
     }
   }
-  
-  credentials = new AWS.SharedIniFileCredentials({ 
+
+  credentials = new AWS.SharedIniFileCredentials({
       profile: profile || 'default',
       // the filename to use when loading credentials
       // use of AWS_SHARED_CREDENTIALS_FILE environment variable
@@ -56,38 +56,39 @@ var readStdin = function() {
 
 var execute = function(endpoint, region, path, method, body) {
   return new Promise((resolve, reject) => {
-    var req = new AWS.HttpRequest(endpoint); 
-    req.method = method || 'GET'; 
-    req.path = path; 
-    req.region = region; 
+    var req = new AWS.HttpRequest(endpoint);
+    req.method = method || 'GET';
+    req.path = path;
+    req.region = region;
 
     if(body) {
       if(typeof body === "object") {
-        req.body = JSON.stringify(body); 
+        req.body = JSON.stringify(body);
       } else {
         req.body = body;
       }
     }
-    
-    req.headers['presigned-expires'] = false; 
+
+    req.headers['presigned-expires'] = false;
+    req.headers['content-type'] = 'application/json';
     req.headers.Host = endpoint.host;
 
-    var signer = new AWS.Signers.V4(req, 'es'); 
-    signer.addAuthorization(credentials, new Date()); 
-    
-    var send = new AWS.NodeHttpClient(); 
-    send.handleRequest(req, null, (httpResp) => { 
-      var body = ''; 
-      httpResp.on('data', (chunk) => { 
-        body += chunk; 
-      }); 
-      httpResp.on('end', (chunk) => { 
-        resolve(body); 
-      }); 
-    }, (err) => { 
-      console.log('Error: ' + err); 
-      reject(err); 
-    }); 
+    var signer = new AWS.Signers.V4(req, 'es');
+    signer.addAuthorization(credentials, new Date());
+
+    var send = new AWS.NodeHttpClient();
+    send.handleRequest(req, null, (httpResp) => {
+      var body = '';
+      httpResp.on('data', (chunk) => {
+        body += chunk;
+      });
+      httpResp.on('end', (chunk) => {
+        resolve(body);
+      });
+    }, (err) => {
+      console.log('Error: ' + err);
+      reject(err);
+    });
   });
 };
 
