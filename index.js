@@ -34,6 +34,7 @@ var getCredentials = function*() {
       // see also 'The Shared Credentials File' http://docs.aws.amazon.com/cli/latest/topic/config-vars.html
       filename: process.env.AWS_SHARED_CREDENTIALS_FILE
    });
+   return credentials.getPromise();
 }
 
 var readStdin = function() {
