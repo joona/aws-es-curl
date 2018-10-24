@@ -38,3 +38,6 @@ Pipe queries to ElasticSearch.
 ```
 $ echo '{ "size": 0, "aggs": { "types": { "term": { "field": "_type" } } } }' | aws-es-curl -X POST http://domain-search-jkewre3423432kfdsax.eu-west-1.es.amazonaws.com/_search
 ```
+
+## Related
+* [aws-es-proxy](https://github.com/joona/aws-es-proxy)
