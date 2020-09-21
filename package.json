@@ -1,6 +1,6 @@
 {
   "name": "aws-es-curl",
-  "version": "1.0.8",
+  "version": "1.0.9",
   "description": "Simple curl-like utility with request signing support for AWS Elasticsearch",
   "main": "index.js",
   "repository": {
@@ -16,7 +16,7 @@
   "author": "Joona Kulmala <jmkulmala@gmail.com>",
   "license": "MIT",
   "dependencies": {
-    "aws-sdk": "^2.4.7",
+    "aws-sdk": "^2.756.0",
     "co": "^4.6.0",
     "optimist": "^0.6.1"
   }
