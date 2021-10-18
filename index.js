@@ -72,6 +72,7 @@ var execute = function(endpoint, region, path, method, body) {
 
     req.headers['presigned-expires'] = false;
     req.headers['content-type'] = 'application/json';
+    req.headers['kbn-xsrf'] = true;
     req.headers.Host = endpoint.host;
 
     var signer = new AWS.Signers.V4(req, 'es');
